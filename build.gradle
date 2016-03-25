@@ -1,0 +1,116 @@
+buildscript {
+    repositories {
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' } //spock
+        maven { url 'http://repo.jfrog.org/artifactory/libs-releases/'}  //SipUnit
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'groovy'
+apply plugin: 'jacoco'
+apply plugin: 'checkstyle'
+
+group = 'com.galiglobal.hellosipworld'
+version = '1.0-SNAPSHOT'
+
+description = 'SIP Sample Application for Restcomm SIP Servlet Server'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    maven { url 'http://repo.jfrog.org/artifactory/libs-releases/'}  //SipUnit
+    maven { url 'https://repository.jboss.org/nexus/content/groups/public-jboss/' } //javax.sip
+    maven { url "https://oss.sonatype.org/content/groups/public" }
+    maven { url "https://repository.jboss.org/nexus/content/groups/public/" }
+    maven { url "https://repo.maven.apache.org/maven2" }
+    maven { url 'http://repo.jfrog.org/artifactory/libs-releases/'}  //SipUnit
+    mavenCentral()
+}
+
+dependencies {
+    providedCompile group: 'log4j', name: 'log4j', version:'1.2.14'
+    providedCompile group: 'commons-logging', name: 'commons-logging-api', version:'1.0.4'
+    providedCompile group: 'javax.servlet', name: 'servlet-api', version:'2.5'
+
+    // Spock
+    compile 'org.codehaus.groovy:groovy-all:2.4.1'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+
+    // SIP Testing
+    testCompile group: 'junit', name: 'junit', version:'3.8.1'
+    testCompile 'org.cafesip.sipunit:sipunit:2.0.0'
+    testCompile 'javax.sip:jain-sip-api:1.2.1.4'
+    testCompile 'javax.sip:jain-sip-ri:1.2.243'
+    providedCompile group: 'org.mobicents.servlet.sip', name: 'sip-servlets-spec', version:'1.7.0.FINAL'
+}
+
+task buildDocker(type:Exec) {
+
+    //on windows:
+    //commandLine 'cmd', '/c', 'docker', 'build', '-t', 'antonmry/restcomm-hellosipworld:1.0-SNAPSHOT', '.'
+
+    //on linux
+    commandLine 'docker', 'build', '-t', 'antonmry/restcomm-hellosipworld:1.0-SNAPSHOT', '.'
+
+}
+
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/reports/coverage"
+    }
+}
+
+// Integration test configuration
+
+sourceSets {
+    integrationTest {
+        groovy {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/testInt/groovy')
+            srcDir file('src/testInt/java')
+        }
+        resources.srcDir file('src/testInt/resources')
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+task intTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+
+    reports {
+        html {
+            enabled true
+        }
+        reports.html.destination = "${buildDir}/reports/intTests"
+    }
+}
+
+// Checkstyle configuration
+
+checkstyle {
+    toolVersion '6.9'    // Be sure checkstyle.xml corresponds to this version
+    showViolations=false
+    ignoreFailures=true
+    checkstyleMain.source = 'src/main/java'
+}
+
+task checkstyleHtml << {
+    ant.xslt(in: checkstyleMain.reports.xml.destination,
+            style: file('config/checkstyle/checkstyle-noframes-sorted.xsl'),
+            out: new File(checkstyleMain.reports.xml.destination.parent, 'main.html'))
+}
+
+checkstyleMain.finalizedBy checkstyleHtml

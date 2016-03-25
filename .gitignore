@@ -1,0 +1,26 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Optare NetApps Projects .gitignore Template template
+### Optare Solutions. NetApps Projects.
+### Use this template to create .gitignore files.
+
+# IntelliJ project files
+*.iml
+.idea/
+out/
+gen/
+logs/
+
+# Maven & gradle output files
+target/
+build/
+.gradle
+gradle-local.properties
+
+# Eclipse
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib

@@ -1,0 +1,12 @@
+version: '2'
+services:
+  restcomm-hellosipworld:
+    build: .
+    container_name: restcomm-hellosipworld
+    command: /home/jboss/mss-3.1.633-jboss-as-7.2.0.Final/bin/standalone.sh -c standalone-sip.xml -b 0.0.0.0 -bmanagement 0.0.0.0
+    ports:
+      - "5080:5080/udp"
+      - "5080:5080/tcp"
+      - "8080:8080/tcp"
+      - "9990:9990/tcp"
+      - "8787:8787/tcp"
