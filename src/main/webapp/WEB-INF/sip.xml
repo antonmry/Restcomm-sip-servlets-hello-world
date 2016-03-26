@@ -3,7 +3,7 @@
 <sip-app>
 	<!-- Archetype Created SIP Application -->
 	<app-name>com.galiglobal.HelloSipWorldApplication</app-name>
-	
+
 	<servlet-selection>
 		<main-servlet>
 			HelloSipWorldServlet
@@ -15,8 +15,8 @@
 		<display-name>HelloSipWorldServlet</display-name>
 		<description>Hello SIP World Servlet</description>
 		<servlet-class>
-			com.galiglobal.hellosipworld.HelloSipWorld
-		</servlet-class>
+            com.galiglobal.hellosipworld.HelloSipWorld
+        </servlet-class>
 		<load-on-startup>1</load-on-startup>
-	</servlet>	
+	</servlet>
 </sip-app>

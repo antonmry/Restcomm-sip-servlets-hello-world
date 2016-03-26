@@ -1,4 +1,4 @@
-import com.galiglobal.hellosipworld.SipClient
+import com.galiglobal.siptester.SipClient
 import spock.lang.*
 
 class RegisterIntegrationSpec extends spock.lang.Specification {
@@ -10,10 +10,10 @@ class RegisterIntegrationSpec extends spock.lang.Specification {
         setup:
 
         expect:
-        assert sipClient.Register(mySipURI, contact, expiration)
+        assert sipClient.register(mySipURI, contact, expiration)
 
         cleanup:
-        sipClient.Register(mySipURI, contact, 0)
+        sipClient.register(mySipURI, contact, 0)
 
         where:
         mySipURI | contact | expiration

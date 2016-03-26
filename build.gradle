@@ -102,8 +102,8 @@ task intTest(type: Test) {
 
 checkstyle {
     toolVersion '6.9'    // Be sure checkstyle.xml corresponds to this version
-    showViolations=false
-    ignoreFailures=true
+    showViolations=true
+    ignoreFailures=false
     checkstyleMain.source = 'src/main/java'
 }
 
