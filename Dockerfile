@@ -4,8 +4,8 @@ MAINTAINER Antón R. Yuste
 
 USER jboss
 
-ADD build/libs/hellosipworld-1.0-SNAPSHOT.war $JBOSS_HOME/standalone/deployments/
+ADD config/docker/hellosipworld-1.0-SNAPSHOT.war $JBOSS_HOME/standalone/deployments/
 ADD config/dar/mobicents-dar.properties $JBOSS_HOME/standalone/configuration/dars/
 
 # Only for test
-RUN $JBOSS_HOME/bin/add-user.sh admin Admin#70365 --silent
+#RUN $JBOSS_HOME/bin/add-user.sh admin Admin#70365 --silent

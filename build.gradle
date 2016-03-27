@@ -49,6 +49,12 @@ dependencies {
 
 task buildDocker(type:Exec) {
 
+    copy {
+        from 'build/libs'
+        into 'config/docker'
+        include 'hellosipworld-1.0-SNAPSHOT.war'
+    }
+
     //on windows:
     //commandLine 'cmd', '/c', 'docker', 'build', '-t', 'antonmry/restcomm-hellosipworld:1.0-SNAPSHOT', '.'
 
